@@ -1,6 +1,6 @@
 # Clipboard Toolkit icon concept
 
-Generated using the built-in image generation tool. The user selected this chest version as the mod icon. The image is stored at `../src/main/resources/clipboardtoolkit_icon.png` and is used without further visual changes.
+Generated using the built-in image generation tool. The user selected this chest version as the mod icon. The original is preserved at `clipboardtoolkit_icon-original.png`. The packaged icon at `../src/main/resources/clipboardtoolkit_icon.png` is resized to 256×256 with transparency preserved to reduce the JAR size.
 
 Final edit prompt:
 
