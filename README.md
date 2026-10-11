@@ -97,3 +97,5 @@ JEI / EMI との連携は当面見送っています。どちらも導入は不�
 
 - [Create](https://github.com/Creators-of-Create/Create)
 - [NeoForge](https://neoforged.net/)
+
+AIを使用して作成されました
