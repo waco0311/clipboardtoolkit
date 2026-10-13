@@ -117,3 +117,5 @@ Create 標準の追記・重複除外に従うため、確実にリストを複�
 
 - [Create](https://github.com/Creators-of-Create/Create)
 - [NeoForge](https://neoforged.net/)
+
+AIを使用して作成されました
