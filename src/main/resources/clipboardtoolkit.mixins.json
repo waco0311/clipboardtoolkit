@@ -3,7 +3,8 @@
   "minVersion": "0.8",
   "package": "dev.waco0311.clipboardtoolkit.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["StockKeeperRequestScreenMixin"],
+  "mixins": ["ClipboardEditPacketMixin", "ClipboardValueSettingsHandlerMixin", "ClipboardCopyRecipeMixin"],
+  "client": ["StockKeeperRequestScreenMixin", "ClipboardScreenMixin"],
   "injectors": {
     "defaultRequire": 1
   }

@@ -1,4 +1,7 @@
 {
+  "gui.clipboardtoolkit.lock": "Lock (prevent pasting, editing and scanning)",
+  "gui.clipboardtoolkit.unlock": "Locked: click to unlock (copying out and checkboxes remain available)",
+  "message.clipboardtoolkit.locked": "This clipboard is locked. Unlock it with the padlock button on the right.",
   "key.categories.clipboardtoolkit": "Create: Clipboard Toolkit",
   "key.clipboardtoolkit.scan": "Scan storage (hold + use)",
   "message.clipboardtoolkit.scanned": "Recorded %s item types on the clipboard.",

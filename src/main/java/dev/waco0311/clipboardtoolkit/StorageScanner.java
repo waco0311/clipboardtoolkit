@@ -40,6 +40,7 @@ public final class StorageScanner {
                 || player.containerMenu != player.inventoryMenu
                 || !AllBlocks.CLIPBOARD.isIn(clipboard) || clipboard.getCount() != 1
                 || player.getCooldowns().isOnCooldown(clipboard.getItem())) return;
+        if (ClipboardLocks.isLocked(clipboard)) { ClipboardLocks.message(player); return; }
         player.getCooldowns().addCooldown(clipboard.getItem(), 10);
 
         if (!level.hasChunkAt(pos) || !level.getWorldBorder().isWithinBounds(pos)

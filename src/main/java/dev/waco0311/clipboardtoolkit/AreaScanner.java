@@ -33,6 +33,7 @@ public final class AreaScanner {
         if (!player.isAlive() || player.isSpectator() || !player.mayBuild()
                 || player.containerMenu != player.inventoryMenu || !AllBlocks.CLIPBOARD.isIn(clipboard)
                 || clipboard.getCount() != 1 || player.getCooldowns().isOnCooldown(clipboard.getItem())) return;
+        if (ClipboardLocks.isLocked(clipboard)) { ClipboardLocks.message(player); return; }
         player.getCooldowns().addCooldown(clipboard.getItem(), 40);
         if (!blank(clipboard)) { message(player, "not_blank"); return; }
         SelectionBox box = SelectionBox.between(first, second);

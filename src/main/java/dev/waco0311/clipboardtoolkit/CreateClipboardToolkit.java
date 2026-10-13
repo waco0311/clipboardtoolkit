@@ -16,6 +16,10 @@ public class CreateClipboardToolkit {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AreaContents>> AREA_CONTENTS =
             COMPONENTS.registerComponentType("area_contents", builder -> builder
                     .persistent(AreaContents.CODEC).networkSynchronized(AreaContents.STREAM_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> LOCKED =
+            COMPONENTS.registerComponentType("locked", builder -> builder
+                    .persistent(com.mojang.serialization.Codec.BOOL)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.BOOL));
 
     public CreateClipboardToolkit(IEventBus modEventBus) {
         COMPONENTS.register(modEventBus);
@@ -23,7 +27,17 @@ public class CreateClipboardToolkit {
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("3");
+        var registrar = event.registrar("4");
+        registrar.playBidirectional(ClipboardLockPayload.TYPE, ClipboardLockPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer player) {
+                        boolean locked = ClipboardLocks.setLocked(player, payload);
+                        context.reply(new ClipboardLockPayload(payload.slot(), payload.pos(), payload.dimension(), locked));
+                    } else {
+                        net.createmod.catnip.platform.CatnipServices.PLATFORM.executeOnClientOnly(
+                                () -> () -> ClipboardLockClient.receive(payload));
+                    }
+                }));
         registrar.playToServer(ScanStoragePayload.TYPE, ScanStoragePayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
                     if (context.player() instanceof ServerPlayer player) {

@@ -38,10 +38,12 @@ final class AreaSelectionClient {
             return;
         }
         if (active && (mc.level.dimension() != dimension || mc.player.getInventory().selected != slot
-                || !AllBlocks.CLIPBOARD.isIn(mc.player.getMainHandItem()))) reset();
+                || !AllBlocks.CLIPBOARD.isIn(mc.player.getMainHandItem())
+                || ClipboardLocks.isLocked(mc.player.getMainHandItem()))) reset();
         if (!mc.options.keyUse.isDown()) useHeld = false;
         while (SELECT.consumeClick()) {
             if (mc.screen != null || !AllBlocks.CLIPBOARD.isIn(mc.player.getMainHandItem())) continue;
+            if (ClipboardLocks.isLocked(mc.player.getMainHandItem())) { ClipboardLocks.message(mc.player); continue; }
             if (active && mc.player.isShiftKeyDown()) {
                 reset();
                 message("area_cancel");

@@ -1,4 +1,7 @@
 {
+  "gui.clipboardtoolkit.lock": "ロックする（貼り付け・編集・スキャンを防止）",
+  "gui.clipboardtoolkit.unlock": "ロック中：クリックして解除（コピー元・チェック操作は利用可能）",
+  "message.clipboardtoolkit.locked": "このクリップボードはロックされています。右側の鍵ボタンで解除してください。",
   "key.categories.clipboardtoolkit": "Create: Clipboard Toolkit",
   "key.clipboardtoolkit.scan": "収納を記録（押しながら使用）",
   "message.clipboardtoolkit.scanned": "%s 種類のアイテムをクリップボードに記録しました。",

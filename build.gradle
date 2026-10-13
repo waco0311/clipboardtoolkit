@@ -194,5 +194,12 @@ if (providers.gradleProperty('enable_game_tests').orElse('false').get().toBoolea
     configurations.gameTestRuntimeOnly.extendsFrom(configurations.runtimeOnly)
     neoForge.addModdingDependenciesTo(sourceSets.gameTest)
     neoForge.mods.getByName(mod_id).sourceSet(sourceSets.gameTest)
+    neoForge.runs {
+        lockClientTest {
+            client()
+            gameDirectory = project.file('build/lock-client-test')
+            systemProperty 'clipboardtoolkit.clientSmokeTest', 'true'
+        }
+    }
 }
 
