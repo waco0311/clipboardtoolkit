@@ -19,6 +19,40 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClipboardListsTest {
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({
+            "1, x1 | 0▤ +1", "32, x32 | 0▤ +32", "63, x63 | 0▤ +63", "64, x64 | 1▤ +0", "65, x65 | 1▤ +1",
+            "128, x128 | 2▤ +0", "208, x208 | 3▤ +16", "2147483647, x2147483647 | 33554431▤ +63"
+    })
+    void formatsQuantitiesLikeCreateWithoutChangingOrderAmounts(int amount, String expected) {
+        var stack = new ItemStack(Items.APPLE, amount);
+        stack.set(DataComponents.CUSTOM_NAME, Component.literal("りんご"));
+        var accumulator = new ClipboardLists.Accumulator();
+        accumulator.add(stack);
+        var entry = accumulator.content().pages().getFirst().getFirst();
+        assertEquals("りんご\n " + expected, entry.text.getString());
+        assertEquals(amount, entry.itemAmount);
+        assertEquals(amount, ClipboardOrders.requestedAmount(entry));
+        assertEquals(net.minecraft.network.chat.TextColor.fromLegacyFormat(net.minecraft.ChatFormatting.BLACK),
+                entry.text.getSiblings().getFirst().getStyle().getColor());
+        assertEquals(net.minecraft.network.chat.TextColor.fromLegacyFormat(net.minecraft.ChatFormatting.GRAY),
+                entry.text.getSiblings().getLast().getStyle().getColor());
+    }
+
+    @Test
+    void uses64ItemUnitsAndFormatsBothAreaSectionsAfterAggregation() {
+        var accumulator = new ClipboardLists.Accumulator();
+        accumulator.add(new ItemStack(Items.ENDER_PEARL, 16));
+        accumulator.add(new ItemStack(Items.ENDER_PEARL, 64));
+        var snapshot = accumulator.content();
+        var area = new AreaContents(snapshot, snapshot).display();
+        for (var page : area.pages()) {
+            assertTrue(page.get(1).text.getString().endsWith("\n x80 | 1▤ +16"));
+            assertEquals(80, page.get(1).itemAmount);
+        }
+        assertEquals(snapshot.pages().getFirst().getFirst().text, accumulator.content().pages().getFirst().getFirst().text);
+    }
+
     @Test
     void readsCapabilityOnlyStorageWithoutInsertingOrExtracting() {
         ItemStack first = new ItemStack(Items.DIAMOND, 128);

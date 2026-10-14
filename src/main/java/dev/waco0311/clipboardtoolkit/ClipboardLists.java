@@ -3,6 +3,9 @@ package dev.waco0311.clipboardtoolkit;
 import com.simibubi.create.content.equipment.clipboard.ClipboardContent;
 import com.simibubi.create.content.equipment.clipboard.ClipboardEntry;
 import com.simibubi.create.content.equipment.clipboard.ClipboardOverrides.ClipboardType;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -17,6 +20,15 @@ public final class ClipboardLists {
     public static final int MAX_SLOTS = 16384;
 
     private ClipboardLists() {}
+
+    private static MutableComponent entryText(ClipboardEntry entry) {
+        var text = entry.text.copy().append(Component.literal("\n x" + entry.itemAmount)
+                .withStyle(ChatFormatting.BLACK));
+        // Match Create's schematic checklist: its stack symbol always denotes 64 items.
+        text.append(Component.literal(" | " + entry.itemAmount / 64 + "\u25A4 +" + entry.itemAmount % 64)
+                .withStyle(ChatFormatting.GRAY));
+        return text;
+    }
 
     public static boolean isBlank(ClipboardContent content) {
         return !content.readOnly() && content.copiedValues().isEmpty()
@@ -68,7 +80,7 @@ public final class ClipboardLists {
 
         public ClipboardContent content() {
             List<ClipboardEntry> snapshot = entries.stream().map(entry ->
-                    new ClipboardEntry(false, entry.text.copy().append("\n x" + entry.itemAmount))
+                    new ClipboardEntry(false, entryText(entry))
                             .displayItem(entry.icon.copy(), entry.itemAmount)).toList();
             List<List<ClipboardEntry>> pages = new ArrayList<>();
             for (int offset = 0; offset < snapshot.size(); offset += ENTRIES_PER_PAGE) {
